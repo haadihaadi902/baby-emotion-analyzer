@@ -4,6 +4,7 @@ import cv2
 
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import RequestEntityTooLarge
 from moviepy.editor import VideoFileClip
 from tensorflow.keras.models import load_model
 
@@ -17,11 +18,22 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# Allow uploads up to 100 MB
+app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024
+
 
 # Load models
 audio_model = load_model("models/baby_cry_cnn.keras")
 image_model = load_model("models/young_affectnet_mobilenetv2_finetuned.keras")
 baby_verify_model = load_model("models/baby_verify_model.keras")
+
+
+@app.errorhandler(RequestEntityTooLarge)
+def handle_large_file(error):
+    return render_template(
+        "error.html",
+        message="Uploaded video is too large. Please upload a video smaller than 100 MB."
+    ), 413
 
 
 def extract_audio_from_video(video_path, output_audio_path):
@@ -89,10 +101,8 @@ def predict():
     try:
         video_file.save(video_path)
 
-        # Extract frame first
         extract_frame_from_video(video_path, frame_path)
 
-        # Baby verification
         is_baby = verify_baby(frame_path, baby_verify_model)
 
         if not is_baby:
@@ -101,13 +111,9 @@ def predict():
                 message="Please upload a baby crying video only."
             )
 
-        # Extract audio
         extract_audio_from_video(video_path, audio_path)
 
-        # Predict cry reason
         audio_result = predict_audio(audio_path, audio_model)
-
-        # Predict emotion
         image_result = predict_image(frame_path, image_model)
 
         return render_template(
