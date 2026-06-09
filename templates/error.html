@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invalid Video</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>❌ Invalid Video</h1>
+
+    <div class="result-card">
+
+        <h2>Baby Verification Failed</h2>
+
+        <p>
+            {{ message }}
+        </p>
+
+        <p>
+            This system only analyzes videos containing babies crying.
+        </p>
+
+        <ul style="text-align:left; display:inline-block;">
+            <li>✅ Actual baby crying video</li>
+            <li>❌ Adult crying video</li>
+            <li>❌ Random videos (cars, animals, etc.)</li>
+            <li>❌ Movies or animation clips</li>
+            <li>❌ Shouting adults or background noise</li>
+        </ul>
+
+        <br><br>
+
+        <a href="/" class="btn">
+            Upload Another Video
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

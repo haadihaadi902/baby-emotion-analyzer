@@ -1,0 +1,9 @@
+Flask
+tensorflow
+keras
+numpy
+opencv-python-headless
+moviepy
+librosa
+Werkzeug
+gunicorn

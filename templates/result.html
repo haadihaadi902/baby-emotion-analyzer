@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Baby Emotion Analysis Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Baby Emotion Analysis Result</h1>
+
+    <!-- Cry Analysis -->
+    <div class="result-card">
+        <h2>🎤 Cry Analysis</h2>
+        <p><strong>Reason:</strong> {{ cry_reason }}</p>
+
+        <div class="confidence-bar">
+            <div class="confidence-fill" style="width: {{ cry_confidence }}%;">
+                {{ cry_confidence }}%
+            </div>
+        </div>
+
+        <p>
+            <strong>Intensity:</strong>
+            <span class="badge {% if cry_intensity == 'high' %}high{% elif cry_intensity == 'medium' %}medium{% else %}low{% endif %}">
+                {{ cry_intensity }}
+            </span>
+        </p>
+    </div>
+
+    <!-- Emotion Analysis -->
+    <div class="result-card">
+        <h2>😊 Emotion Analysis</h2>
+        <p><strong>Emotion:</strong> {{ emotion }}</p>
+
+        <div class="confidence-bar">
+            <div class="confidence-fill" style="width: {{ emotion_confidence }}%;">
+                {{ emotion_confidence }}%
+            </div>
+        </div>
+
+        <p>
+            <strong>Intensity:</strong>
+            <span class="badge {% if emotion_intensity == 'high' %}high{% elif emotion_intensity == 'medium' %}medium{% else %}low{% endif %}">
+                {{ emotion_intensity }}
+            </span>
+        </p>
+    </div>
+
+    <!-- Baby Verification -->
+    {% if not baby_verified %}
+    <div class="result-card">
+        <h2>👶 Baby Verification</h2>
+        <p>Warning: The uploaded video may not contain a baby crying.</p>
+        <ul style="text-align:left; display:inline-block;">
+            <li>✅ Actual baby crying video</li>
+            <li>❌ Adult crying video</li>
+            <li>❌ Random videos or noises</li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <a class="back-btn" href="/">
+        Upload Another Video
+    </a>
+
+</div>
+
+</body>
+</html>
