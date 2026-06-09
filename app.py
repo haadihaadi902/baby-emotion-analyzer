@@ -4,7 +4,7 @@ import cv2
 
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
-from moviepy import VideoFileClip
+from moviepy.editor import VideoFileClip
 from tensorflow.keras.models import load_model
 
 from utils.audio_predict import predict_audio
